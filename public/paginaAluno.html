@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Reserva de Equipamento - Aluno</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+        .container { max-width: 400px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
+        h2 { text-align: center; margin-bottom: 24px; }
+        label { display: block; margin-top: 16px; }
+        input, select, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; }
+        button { margin-top: 24px; width: 100%; padding: 10px; background: #007bff; color: #fff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Reserva de Equipamento</h2>
+        <form id="reservaForm">
+            <label for="nome">Nome do Aluno:</label>
+            <input type="text" id="nome" name="nome" required readonly>
+
+            <label for="equipamento">Equipamento:</label>
+            <select id="equipamento" name="equipamento" required>
+                <option value="">Selecione...</option>
+                <option value="notebook">Notebook</option>
+                <option value="projetor">Projetor</option>
+                <option value="camera">Câmera</option>
+                <option value="tablet">Tablet</option>
+            </select>
+
+            <label for="data">Data da Reserva:</label>
+            <input type="date" id="data" name="data" required>
+
+            <label for="horario">Horário:</label>
+            <input type="time" id="horario" name="horario" required>
+
+            <label for="observacoes">Observações:</label>
+            <textarea id="observacoes" name="observacoes" rows="3"></textarea>
+
+            <button type="submit">Solicitar Reserva</button>
+        </form>
+        <div id="mensagem" style="margin-top:16px; text-align:center;"></div>
+    </div>
+    <script>
+        // Preencher nome do aluno logado
+        fetch('/api/profile')
+          .then(res => res.json())
+          .then(data => {
+            if (data.user && data.user.username) {
+              document.getElementById('nome').value = data.user.username;
+            }
+          });
+
+        document.getElementById('reservaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const equipamento = document.getElementById('equipamento').value;
+            const dataReserva = document.getElementById('data').value;
+            const horario = document.getElementById('horario').value;
+            const observacoes = document.getElementById('observacoes').value;
+            const msg = document.getElementById('mensagem');
+            msg.textContent = '';
+            try {
+                const res = await fetch('/api/reservas', {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify({ nome, equipamento, data: dataReserva, horario, observacoes })
+                });
+                const j = await res.json();
+                if (j.ok) {
+                    msg.style.color = '#388e3c';
+                    msg.textContent = 'Pedido de reserva enviado!';
+                    this.reset();
+                    document.getElementById('nome').value = nome;
+                } else {
+                    msg.style.color = '#d32f2f';
+                    msg.textContent = j.error || 'Não foi possível enviar a reserva.';
+                }
+            } catch (err) {
+                msg.style.color = '#d32f2f';
+                msg.textContent = 'Erro de conexão com o servidor.';
+            }
+        });
+    </script>
+</body>
+</html>

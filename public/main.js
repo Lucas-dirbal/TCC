@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
 // Login handler para login.html
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
@@ -66,4 +67,34 @@ if (loginForm) {
       msg.textContent = 'Erro de conexão com o servidor.';
     }
   });
+
+  // Lógica para mostrar tela de registro escondida
+  const logoImg = document.querySelector('.login-logo img');
+  let adminStep = 0;
+  if (logoImg) {
+    logoImg.addEventListener('click', () => {
+      // Mostra prompt para login admin
+      if (adminStep === 0) {
+        const user = prompt('Login de administrador:');
+        if (user === 'Admin') {
+          adminStep = 1;
+          const pass = prompt('Senha de administrador:');
+          if (pass === 'Lucas') {
+            // Libera acesso ao link de registro
+            const regLink = document.getElementById('hidden-register-link');
+            if (regLink) {
+              regLink.innerHTML = '<a href="register.html">Criar conta</a>';
+              regLink.style.display = 'block';
+              regLink.style.color = '#2575fc';
+            }
+            alert('Acesso liberado para criar conta!');
+          } else {
+            alert('Senha incorreta!');
+          }
+        } else {
+          alert('Login incorreto!');
+        }
+      }
+    });
+  }
 }
