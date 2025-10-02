@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const db = require('./db');
+const bcrypt = require('bcryptjs');
 
 // Middleware
 app.use(express.json());
@@ -14,6 +16,29 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/login.html'));
+});
+
+// Rota de login
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ ok: false, error: 'Usuário e senha obrigatórios.' });
+    }
+    try {
+        const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+        if (!user) {
+            return res.status(401).json({ ok: false, error: 'Usuário ou senha inválidos.' });
+        }
+        // Verifica senha
+        const match = await bcrypt.compare(password, user.password_hash);
+        if (!match) {
+            return res.status(401).json({ ok: false, error: 'Usuário ou senha inválidos.' });
+        }
+        // Login bem-sucedido
+        res.json({ ok: true, user: { id: user.id, username: user.username, classe: user.classe } });
+    } catch (err) {
+        res.status(500).json({ ok: false, error: 'Erro interno do servidor.' });
+    }
 });
 
 // API para reservas (simulada)

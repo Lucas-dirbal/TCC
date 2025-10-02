@@ -102,48 +102,49 @@ function initLoginSystem() {
 // Processar login
 function handleLogin() {
     console.log('🔄 Processando login...');
-    
     const username = document.getElementById('username')?.value.trim();
     const password = document.getElementById('password')?.value;
     const remember = document.getElementById('remember')?.checked;
-    
     console.log('📧 Usuário:', username);
     console.log('🔑 Senha:', password ? '***' : 'vazia');
     console.log('💾 Lembrar:', remember);
-    
     if (!username || !password) {
         console.log('❌ Campos vazios');
         showNotification('Por favor, preencha todos os campos!', 'error');
         return;
     }
-    
-    // Verificar credenciais
-    if (users[username] && users[username].password === password) {
-        console.log('✅ Credenciais válidas');
-        
-        const userData = {
-            username: username,
-            role: users[username].role,
-            name: users[username].name,
-            email: users[username].email,
-            loginTime: new Date().toISOString()
-        };
-        
-        // Salvar sessão
-        saveUserSession(userData, remember);
-        
-        // Redirecionar
-        showNotification(`Bem-vindo, ${userData.name}!`, 'success');
-        setTimeout(() => {
-            console.log('🚀 Redirecionando para sistema...');
-            window.location.href = 'sistema.html';
-        }, 1000);
-        
-    } else {
-        console.log('❌ Credenciais inválidas');
-        showNotification('Usuário ou senha incorretos!', 'error');
-        document.getElementById('password').value = '';
-    }
+    // Autenticação via backend
+    fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    })
+    .then(res => res.json())
+    .then(j => {
+        if (j.ok && j.user) {
+            console.log('✅ Login backend OK:', j.user);
+            const userData = {
+                username: j.user.username,
+                role: j.user.classe === 3 ? 'admin' : (j.user.classe === 2 ? 'professor' : 'aluno'),
+                name: j.user.username,
+                email: '',
+                loginTime: new Date().toISOString()
+            };
+            saveUserSession(userData, remember);
+            showNotification(`Bem-vindo, ${userData.username}!`, 'success');
+            setTimeout(() => {
+                window.location.href = 'sistema.html';
+            }, 1000);
+        } else {
+            console.log('❌ Login backend falhou:', j.error);
+            showNotification(j.error || 'Usuário ou senha incorretos!', 'error');
+            document.getElementById('password').value = '';
+        }
+    })
+    .catch(err => {
+        console.log('❌ Erro de conexão:', err);
+        showNotification('Erro de conexão com o servidor.', 'error');
+    });
 }
 
 // Salvar sessão do usuário
