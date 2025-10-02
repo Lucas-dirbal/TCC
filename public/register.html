@@ -4,7 +4,108 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Registrar</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body.login-bg {
+      background: linear-gradient(120deg, #4f8cff 0%, #6dd5ed 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(79,140,255,0.18);
+      padding: 2.5rem 2rem 2rem 2rem;
+      max-width: 370px;
+      width: 100%;
+      margin: 2rem auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .login-logo img {
+      width: 72px;
+      margin-bottom: 0.5rem;
+      filter: drop-shadow(0 2px 8px #4f8cff44);
+    }
+    h2 {
+      font-size: 2rem;
+      color: #4f8cff;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+    .input-group {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #e0e7ff;
+      background: #f7faff;
+      font-size: 1rem;
+      transition: border 0.2s;
+      outline: none;
+      margin-top: 0.2rem;
+    }
+    .input-group input:focus, .input-group select:focus {
+      border-color: #4f8cff;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 0.9rem 0;
+      background: linear-gradient(90deg, #4f8cff 60%, #6dd5ed 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #4f8cff22;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .login-btn:hover {
+      background: linear-gradient(90deg, #6dd5ed 0%, #4f8cff 100%);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .login-message {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      min-height: 1.2em;
+      text-align: center;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+    .register-link {
+      font-size: 0.98rem;
+      color: #555;
+      margin-top: 0.5rem;
+    }
+    .register-link a {
+      color: #4f8cff;
+      text-decoration: underline;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .register-link a:hover {
+      color: #388e3c;
+    }
+    @media (max-width: 500px) {
+      .login-card {
+        padding: 1.2rem 0.5rem;
+        max-width: 98vw;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
 </head>
 
 <body class="login-bg">
@@ -32,6 +133,34 @@
     <div id="register-message" class="login-message"></div>
     <p class="register-link">Já tem conta? <a href="login.html">Entrar</a></p>
   </div>
+  <script>
+    document.getElementById('form-register').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        username: form.username.value,
+        password: form.password.value,
+        classe: form.classe.value
+      };
+      const msg = document.getElementById('register-message');
+      msg.textContent = '';
+      try {
+        const res = await fetch('/api/register', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify(data) });
+        const j = await res.json();
+        if (j.ok) {
+          msg.style.color = '#388e3c';
+          msg.textContent = 'Conta criada com sucesso!';
+          setTimeout(() => { location.href = '/'; }, 800);
+        } else {
+          msg.style.color = '#d32f2f';
+          msg.textContent = j.error || 'Não foi possível criar a conta.';
+        }
+      } catch (err) {
+        msg.style.color = '#d32f2f';
+        msg.textContent = 'Erro de conexão com o servidor.';
+      }
+    });
+  </script>
   <script>
     document.getElementById('form-register').addEventListener('submit', async (e) => {
       e.preventDefault();

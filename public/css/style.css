@@ -26,6 +26,10 @@ body {
     background-color: var(--light-bg);
 }
 
+a {
+text-decoration: none;
+}
+
 /* ===== NAVEGAÇÃO ===== */
 .navbar {
     background: var(--primary-color);
