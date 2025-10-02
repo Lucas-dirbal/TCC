@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre - Sistema de Gestão</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .about-container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 0 2rem;
+        }
+        
+        .about-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .about-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .tech-item {
+            background: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .features-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .features-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .features-list li:before {
+            content: "✅ ";
+            margin-right: 0.5rem;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+            text-align: center;
+        }
+        
+        .back-button:hover {
+            background: #2980b9;
+        }
+        
+        @media (max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🎓 Colégio Reni Correia Gamper</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="login.html">Sistema</a></li>
+                <li><a href="sobre.html" class="active">Sobre</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Content -->
+    <div class="about-container">
+        <div class="about-header">
+            <h1>Sobre o Projeto</h1>
+            <p>Sistema de Gestão de Equipamentos - Trabalho de Conclusão de Curso</p>
+        </div>
+
+        <div class="about-content">
+            <div class="about-card">
+                <h2>📋 Sobre o Sistema</h2>
+                <p>Este sistema foi desenvolvido como parte do Trabalho de Conclusão de Curso do técnico em Desenvolvimento de Sistemas, com o objetivo de modernizar e otimizar a gestão de equipamentos no ambiente escolar.</p>
+                
+                <h3>🎯 Objetivos Principais</h3>
+                <ul class="features-list">
+                    <li>Centralizar o controle de equipamentos</li>
+                    <li>Otimizar processos de empréstimo</li>
+                    <li>Melhorar a comunicação entre usuários</li>
+                    <li>Reduzir perdas e extravios</li>
+                    <li>Fornecer relatórios e estatísticas</li>
+                </ul>
+            </div>
+
+            <div class="about-card">
+                <h2>🛠️ Tecnologias Utilizadas</h2>
+                <div class="tech-stack">
+                    <span class="tech-item">HTML5</span>
+                    <span class="tech-item">CSS3</span>
+                    <span class="tech-item">JavaScript</span>
+                    <span class="tech-item">LocalStorage</span>
+                    <span class="tech-item">Responsive Design</span>
+                    <span class="tech-item">Git</span>
+                </div>
+                
+                <h3>📊 Funcionalidades</h3>
+                <ul class="features-list">
+                    <li>Sistema de autenticação multi-usuário</li>
+                    <li>Cadastro e gestão de equipamentos</li>
+                    <li>Controle de empréstimos</li>
+                    <li>Relatórios em PDF</li>
+                    <li>Interface responsiva</li>
+                    <li>Dashboard com estatísticas</li>
+                </ul>
+            </div>
+
+            <div class="about-card">
+                <h2>👨‍💻 Desenvolvedor</h2>
+                <p><strong>Nome:</strong> Lucas Dircksen Balcevicz</p>
+                <p><strong>Curso:</strong> Técnico em Desenvolvimento de Sistemas</p>
+                <p><strong>Instituição:</strong> Colégio Estadual Profª Reni Correia Gamper</p>
+                <p><strong>Local:</strong> Manoel Ribas - PR</p>
+                <p><strong>Ano:</strong> 2025</p>
+            </div>
+
+            <div class="about-card">
+                <h2>👨‍🏫 Orientação</h2>
+                <p><strong>Orientador:</strong> Richardson Schawarski Cruz</p>
+                <p><strong>Disciplina:</strong> Projeto Integrador</p>
+                <p><strong>Componente Curricular:</strong> Trabalho de Conclusão de Curso</p>
+                
+                <h3>🎓 Instituição</h3>
+                <p>Colégio Estadual Profª Reni Correia Gamper - EMPN</p>
+                <p>Manoel Ribas - Paraná</p>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-button">← Voltar para o Início</a>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
