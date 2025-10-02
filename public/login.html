@@ -1,32 +1,30 @@
-<!doctype html>
-<html lang="pt-BR">
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <main>
-    <h2>Entrar</h2>
-    <form id="form-login">
-      <label>Usuário<br><input name="username" required></label><br>
-      <label>Senha<br><input type="password" name="password" required></label><br>
-      <button type="submit">Entrar</button>
+<body class="login-bg">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="https://img.icons8.com/fluency/96/000000/user-shield.png" alt="Logo">
+    </div>
+    <h2>Bem-vindo!</h2>
+    <form id="loginForm">
+      <div class="input-group">
+        <input type="text" placeholder="Usuário" name="username" required>
+      </div>
+      <div class="input-group">
+        <input type="password" placeholder="Senha" name="password" required>
+      </div>
+      <button type="submit" class="login-btn">Entrar</button>
     </form>
-    <p><a href="/register.html">Criar conta</a></p>
-    <pre id="out"></pre>
-  </main>
-  <script>
-    document.getElementById('form-login').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const data = { username: form.username.value, password: form.password.value };
-      const res = await fetch('/api/login', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify(data) });
-      const j = await res.json();
-      document.getElementById('out').textContent = JSON.stringify(j, null, 2);
-      if (j.ok) location.href = '/';
-    });
-  </script>
+    <div id="login-message" class="login-message"></div>
+    <p class="register-link">Não tem uma conta? <a href="register.html">Cadastre-se</a></p>
+  </div>
+  <script src="main.js"></script>
 </body>
 </html>

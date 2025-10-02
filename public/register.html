@@ -6,26 +6,47 @@
   <title>Registrar</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
-  <main>
-    <h2>Registrar</h2>
+
+<body class="login-bg">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="https://img.icons8.com/fluency/96/000000/add-user-group-man-man.png" alt="Logo">
+    </div>
+    <h2>Crie sua conta</h2>
     <form id="form-register">
-      <label>Usuário<br><input name="username" required></label><br>
-      <label>Senha<br><input type="password" name="password" required></label><br>
-      <button type="submit">Registrar</button>
+      <div class="input-group">
+        <input type="text" placeholder="Usuário" name="username" required>
+      </div>
+      <div class="input-group">
+        <input type="password" placeholder="Senha" name="password" required>
+      </div>
+      <button type="submit" class="login-btn">Registrar</button>
     </form>
-    <p><a href="/login.html">Já tenho conta</a></p>
-    <pre id="out"></pre>
-  </main>
+    <div id="register-message" class="login-message"></div>
+    <p class="register-link">Já tem conta? <a href="login.html">Entrar</a></p>
+  </div>
   <script>
     document.getElementById('form-register').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
       const data = { username: form.username.value, password: form.password.value };
-      const res = await fetch('/api/register', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify(data) });
-      const j = await res.json();
-      document.getElementById('out').textContent = JSON.stringify(j, null, 2);
-      if (j.ok) location.href = '/';
+      const msg = document.getElementById('register-message');
+      msg.textContent = '';
+      try {
+        const res = await fetch('/api/register', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify(data) });
+        const j = await res.json();
+        if (j.ok) {
+          msg.style.color = '#388e3c';
+          msg.textContent = 'Conta criada com sucesso!';
+          setTimeout(() => { location.href = '/'; }, 800);
+        } else {
+          msg.style.color = '#d32f2f';
+          msg.textContent = j.error || 'Não foi possível criar a conta.';
+        }
+      } catch (err) {
+        msg.style.color = '#d32f2f';
+        msg.textContent = 'Erro de conexão com o servidor.';
+      }
     });
   </script>
 </body>

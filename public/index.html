@@ -6,19 +6,24 @@
     <title>Sistema gerenciador RENI - TCC Lucas</title>
     <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
-    <main>
-      <h1>Bem vindo ao Sistema gerenciador RENI - TCC Lucas</h1>
-      <p>
-        <a href="register.html">Registrar</a> 
-        <a href="login.html">Entrar</a>
-      </p>
-      <section id="profile">
-        <button id="btn-check">Verificar sessão (perfil)</button>
-        <pre id="profile-output"></pre>
-        <button id="btn-logout">Logout</button>
-      </section>
-    </main>
+
+  <body class="login-bg">
+    <div class="login-card" style="max-width: 500px;">
+      <div class="login-logo">
+        <img src="https://img.icons8.com/fluency/96/000000/administrator-male.png" alt="Logo">
+      </div>
+      <h1 style="font-size:2rem; margin-bottom:1rem;">Bem-vindo ao Sistema RENI</h1>
+      <p style="font-size:1.1rem; color:#444; margin-bottom:2rem;">Gerencie usuários e sessões do seu TCC de forma simples e segura.</p>
+      <div style="margin-bottom:1.5rem;">
+        <a href="register.html" class="login-btn" style="margin-right:10px; width:auto; padding:0.7rem 1.5rem;">Registrar</a>
+        <a href="login.html" class="login-btn" style="width:auto; padding:0.7rem 1.5rem;">Entrar</a>
+      </div>
+      <!-- <section id="profile">
+        <button id="btn-check" class="login-btn" style="width:auto; padding:0.6rem 1.2rem; margin-bottom:0.7rem;">Verificar sessão (perfil)</button>
+        <pre id="profile-output" style="background:#f7f8fa; border-radius:8px; padding:1rem; min-height:40px; margin-bottom:0.7rem; color:#333; font-size:1rem;"></pre>
+        <button id="btn-logout" class="login-btn" style="width:auto; padding:0.6rem 1.2rem; background:#d32f2f;">Logout</button>
+      </section> -->
+    </div>
     <script src="main.js"></script>
   </body>
 </html>
