@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Gestão</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/system.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🎓 Sistema de Gestão</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="sistema.html" class="active">Dashboard</a></li>
+                <li><a href="tcc.html">Documentação</a></li>
+                <li><a href="#" id="logoutBtn">Sair</a></li>
+            </ul>
+            <div class="user-info">
+                <span id="userDisplay">Usuário</span>
+                <div class="user-role" id="userRole">admin</div>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="system-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <div class="menu-section">
+                    <h3>Principal</h3>
+                    <ul>
+                        <li><a href="#dashboard" class="menu-item active" data-section="dashboard">📊 Dashboard</a></li>
+                        <li><a href="#equipamentos" class="menu-item" data-section="equipamentos">💻 Equipamentos</a></li>
+                        <li><a href="#emprestimos" class="menu-item" data-section="emprestimos">🔄 Empréstimos</a></li>
+                    </ul>
+                </div>
+                
+                <div class="menu-section admin-only">
+                    <h3>Administrativo</h3>
+                    <ul>
+                        <li><a href="#usuarios" class="menu-item" data-section="usuarios">👥 Usuários</a></li>
+                        <li><a href="#relatorios" class="menu-item" data-section="relatorios">📈 Relatórios</a></li>
+                        <li><a href="#configuracoes" class="menu-item" data-section="configuracoes">⚙ Configurações</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h1>Dashboard</h1>
+                    <p>Visão geral do sistema de gestão</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💻</div>
+                        <div class="stat-info">
+                            <h3 id="totalEquipamentos">0</h3>
+                            <p>Equipamentos</p>
+                        </div>
+                        <div class="stat-trend up">+12%</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">🔄</div>
+                        <div class="stat-info">
+                            <h3 id="totalEmprestimos">0</h3>
+                            <p>Empréstimos Ativos</p>
+                        </div>
+                        <div class="stat-trend down">-5%</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h3 id="equipamentosDisponiveis">0</h3>
+                            <p>Disponíveis</p>
+                        </div>
+                        <div class="stat-trend up">+8%</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">🔧</div>
+                        <div class="stat-info">
+                            <h3 id="equipamentosManutencao">0</h3>
+                            <p>Em Manutenção</p>
+                        </div>
+                        <div class="stat-trend neutral">0%</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="actions-grid">
+                    <div class="action-card" data-action="novo-equipamento">
+                        <div class="action-icon">➕</div>
+                        <h4>Novo Equipamento</h4>
+                        <p>Cadastrar novo item</p>
+                    </div>
+                    
+                    <div class="action-card" data-action="novo-emprestimo">
+                        <div class="action-icon">📅</div>
+                        <h4>Novo Empréstimo</h4>
+                        <p>Registrar empréstimo</p>
+                    </div>
+                    
+                    <div class="action-card" data-action="relatorio-rapido">
+                        <div class="action-icon">📄</div>
+                        <h4>Relatório Rápido</h4>
+                        <p>Gerar relatório</p>
+                    </div>
+                    
+                    <div class="action-card professor-only" data-action="controle-aula">
+                        <div class="action-icon">🎒</div>
+                        <h4>Controle de Aula</h4>
+                        <p>Gerenciar equipamentos</p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <h3>Atividade Recente</h3>
+                    <div class="activity-list" id="activityList">
+                        <!-- Atividades serão carregadas via JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Equipamentos Section -->
+            <section id="equipamentos" class="content-section">
+                <div class="section-header">
+                    <h1>Gestão de Equipamentos</h1>
+                    <p>Cadastro e controle de equipamentos</p>
+                </div>
+
+                <div class="section-actions">
+                    <button class="btn btn-primary" id="btnNovoEquipamento">
+                        ➕ Novo Equipamento
+                    </button>
+                    <div class="search-box">
+                        <input type="text" id="searchEquipamentos" placeholder="Buscar equipamentos...">
+                        <span>🔍</span>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Nº Série</th>
+                                <th>Status</th>
+                                <th>Localização</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="equipamentosTable">
+                            <!-- Dados serão carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Empréstimos Section -->
+            <section id="emprestimos" class="content-section">
+                <div class="section-header">
+                    <h1>Controle de Empréstimos</h1>
+                    <p>Gerenciar empréstimos e devoluções</p>
+                </div>
+
+                <div class="section-actions">
+                    <button class="btn btn-primary" id="btnNovoEmprestimo">
+                        📅 Novo Empréstimo
+                    </button>
+                    <div class="filter-options">
+                        <select id="filterStatus">
+                            <option value="">Todos os status</option>
+                            <option value="ativo">Ativos</option>
+                            <option value="pendente">Pendentes</option>
+                            <option value="concluido">Concluídos</option>
+                            <option value="atrasado">Atrasados</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Equipamento</th>
+                                <th>Usuário</th>
+                                <th>Data Empréstimo</th>
+                                <th>Data Devolução</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emprestimosTable">
+                            <!-- Dados serão carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Usuários Section (Admin only) -->
+            <section id="usuarios" class="content-section">
+                <div class="section-header">
+                    <h1>Gestão de Usuários</h1>
+                    <p>Gerenciar usuários do sistema</p>
+                </div>
+                <div class="admin-message">
+                    <p>Área exclusiva para administradores</p>
+                </div>
+            </section>
+
+            <!-- Relatórios Section -->
+            <section id="relatorios" class="content-section">
+                <div class="section-header">
+                    <h1>Relatórios e Estatísticas</h1>
+                    <p>Gerar relatórios do sistema</p>
+                </div>
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h4>📊 Relatório de Equipamentos</h4>
+                        <p>Relatório completo de todos os equipamentos</p>
+                        <button class="btn btn-secondary">Gerar PDF</button>
+                    </div>
+                    <div class="report-card">
+                        <h4>📈 Estatísticas de Uso</h4>
+                        <p>Estatísticas de utilização dos equipamentos</p>
+                        <button class="btn btn-secondary">Visualizar</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals serão injetados via JavaScript -->
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/equipmentManager.js"></script>
+    <script src="js/loanSystem.js"></script>
+    <script src="js/reports.js"></script>
+</body>
+</html>

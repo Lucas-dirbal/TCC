@@ -1,30 +1,94 @@
-
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Gestão</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
-<body class="login-bg">
-  <div class="login-card">
-    <div class="login-logo">
-      <img src="https://img.icons8.com/fluency/96/000000/user-shield.png" alt="Logo">
-    </div>
-    <h2>Bem-vindo!</h2>
-    <form id="loginForm">
-      <div class="input-group">
-        <input type="text" placeholder="Usuário" name="username" required>
-      </div>
-      <div class="input-group">
-        <input type="password" placeholder="Senha" name="password" required>
-      </div>
-      <button type="submit" class="login-btn">Entrar</button>
-    </form>
-    <div id="login-message" class="login-message"></div>
-  <p class="register-link" id="hidden-register-link" style="display:none;"></p>
-  </div>
-  <script src="main.js"></script>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🎓 Colégio Reni Correia Gamper</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="login.html" class="active">Sistema</a></li>
+                <li><a href="tcc.html">Documentação</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="login-section">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>Acesso ao Sistema</h1>
+                    <p>Entre com suas credenciais</p>
+                </div>
+
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Usuário:</label>
+                        <input type="text" id="username" name="username" required 
+                               placeholder="Digite seu usuário">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" id="password" name="password" required 
+                               placeholder="Digite sua senha">
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox">
+                            <input type="checkbox" id="remember">
+                            <span>Lembrar-me</span>
+                        </label>
+                        <a href="#" class="forgot-password">Esqueci a senha</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-login">
+                        Entrar no Sistema
+                    </button>
+                </form>
+
+                <!-- Demo Credentials -->
+                <div class="demo-credentials">
+                    <h3>Credenciais de Demonstração:</h3>
+                    <div class="credential-cards">
+                        <div class="credential-card" data-user="admin" data-pass="admin123">
+                            <strong>Administrador</strong>
+                            <span>admin / admin123</span>
+                            <small>Acesso total ao sistema</small>
+                        </div>
+                        <div class="credential-card" data-user="professor" data-pass="prof123">
+                            <strong>Professor</strong>
+                            <span>professor / prof123</span>
+                            <small>Controle de empréstimos</small>
+                        </div>
+                        <div class="credential-card" data-user="aluno" data-pass="aluno123">
+                            <strong>Aluno</strong>
+                            <span>aluno / aluno123</span>
+                            <small>Visualizar equipamentos</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>
