@@ -1,29 +1,148 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sistema gerenciador RENI - TCC Lucas</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão de Equipamentos - TCC</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🎓 Colégio Reni Correia Gamper</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Início</a></li>
+                <li><a href="login.html">Sistema</a></li>
+                <li><a href="tcc.html">Documentação</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-  <body class="login-bg">
-    <div class="login-card" style="max-width: 500px;">
-      <div class="login-logo">
-        <img src="https://img.icons8.com/fluency/96/000000/administrator-male.png" alt="Logo">
-      </div>
-      <h1 style="font-size:2rem; margin-bottom:1rem;">Bem-vindo ao Sistema RENI</h1>
-      <p style="font-size:1.1rem; color:#444; margin-bottom:2rem;">Gerencie usuários e sessões do seu TCC de forma simples e segura.</p>
-      <div style="margin-bottom:1.5rem;">
-        <a href="register.html" class="login-btn" style="margin-right:10px; width:auto; padding:0.7rem 1.5rem;">Registrar</a>
-        <a href="login.html" class="login-btn" style="width:auto; padding:0.7rem 1.5rem;">Entrar</a>
-      </div>
-      <!-- <section id="profile">
-        <button id="btn-check" class="login-btn" style="width:auto; padding:0.6rem 1.2rem; margin-bottom:0.7rem;">Verificar sessão (perfil)</button>
-        <pre id="profile-output" style="background:#f7f8fa; border-radius:8px; padding:1rem; min-height:40px; margin-bottom:0.7rem; color:#333; font-size:1rem;"></pre>
-        <button id="btn-logout" class="login-btn" style="width:auto; padding:0.6rem 1.2rem; background:#d32f2f;">Logout</button>
-      </section> -->
-    </div>
-    <script src="main.js"></script>
-  </body>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Sistema de Gestão de Equipamentos</h1>
+            <p class="subtitle">Trabalho de Conclusão de Curso - Técnico em Desenvolvimento de Sistemas</p>
+            
+            <div class="hero-info">
+                <div class="info-card">
+                    <strong>Aluno:</strong> Lucas Dircksen Balcevicz
+                </div>
+                <div class="info-card">
+                    <strong>Orientador:</strong> Richardson Schawarski Cruz
+                </div>
+                <div class="info-card">
+                    <strong>Ano:</strong> 2025
+                </div>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="login.html" class="btn btn-primary">Acessar Sistema</a>
+                <a href="tcc.html" class="btn btn-secondary">Ver Documentação</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Funcionalidades do Sistema</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Cadastro de Equipamentos</h3>
+                    <p>Cadastre e gerencie todos os equipamentos do laboratório</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Controle de Empréstimos</h3>
+                    <p>Controle completo de empréstimos e devoluções</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Relatórios Detalhados</h3>
+                    <p>Gere relatórios em PDF com dados do sistema</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Multi-usuários</h3>
+                    <p>Diferentes níveis de acesso (Admin, Professor, Aluno)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Project -->
+    <section class="about-preview">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Sobre o Projeto</h2>
+                    <p>Este sistema foi desenvolvido como Trabalho de Conclusão de Curso para otimizar a gestão de equipamentos no ambiente escolar, proporcionando maior controle e organização dos recursos disponíveis.</p>
+                    
+                    <div class="tech-stack">
+                        <h3>Tecnologias Utilizadas:</h3>
+                        <div class="tech-tags">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">LocalStorage</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-stats">
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Responsivo</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Tipos de Usuário</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">PDF</div>
+                        <div class="stat-label">Relatórios</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Colégio Estadual Profª Reni Correia Gamper</h3>
+                    <p>Manoel Ribas - PR</p>
+                    <p>2025</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Desenvolvedor</h3>
+                    <p>Lucas Dircksen Balcevicz</p>
+                    <p>Técnico em Desenvolvimento de Sistemas</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <p>Orientador: Richardson Schawarski Cruz</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Sistema de Gestão de Equipamentos - Todos os direitos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
 </html>
