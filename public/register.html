@@ -1,193 +1,89 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Registrar</title>
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    body.login-bg {
-      background: linear-gradient(120deg, #4f8cff 0%, #6dd5ed 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-    }
-    .login-card {
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(79,140,255,0.18);
-      padding: 2.5rem 2rem 2rem 2rem;
-      max-width: 370px;
-      width: 100%;
-      margin: 2rem auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.2rem;
-    }
-    .login-logo img {
-      width: 72px;
-      margin-bottom: 0.5rem;
-      filter: drop-shadow(0 2px 8px #4f8cff44);
-    }
-    h2 {
-      font-size: 2rem;
-      color: #4f8cff;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.5px;
-    }
-    .input-group {
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-    .input-group input, .input-group select {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      border: 1px solid #e0e7ff;
-      background: #f7faff;
-      font-size: 1rem;
-      transition: border 0.2s;
-      outline: none;
-      margin-top: 0.2rem;
-    }
-    .input-group input:focus, .input-group select:focus {
-      border-color: #4f8cff;
-    }
-    .login-btn {
-      width: 100%;
-      padding: 0.9rem 0;
-      background: linear-gradient(90deg, #4f8cff 60%, #6dd5ed 100%);
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px #4f8cff22;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .login-btn:hover {
-      background: linear-gradient(90deg, #6dd5ed 0%, #4f8cff 100%);
-      transform: translateY(-2px) scale(1.03);
-    }
-    .login-message {
-      font-size: 1rem;
-      margin-top: 0.5rem;
-      min-height: 1.2em;
-      text-align: center;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-    }
-    .register-link {
-      font-size: 0.98rem;
-      color: #555;
-      margin-top: 0.5rem;
-    }
-    .register-link a {
-      color: #4f8cff;
-      text-decoration: underline;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .register-link a:hover {
-      color: #388e3c;
-    }
-    @media (max-width: 500px) {
-      .login-card {
-        padding: 1.2rem 0.5rem;
-        max-width: 98vw;
-      }
-      h2 {
-        font-size: 1.4rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Registrar conta no Sistema de Gestão do Colégio Reni Correia Gamper">
+    <title>Registrar - Sistema de Gestão</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>🎓 Colégio Reni Correia Gamper</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="login.html">Sistema</a></li>
+                <li><a href="register.html" class="active">Registrar</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Menu mobile" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-<body class="login-bg">
-  <div class="login-card">
-    <div class="login-logo">
-      <img src="https://img.icons8.com/fluency/96/000000/add-user-group-man-man.png" alt="Logo">
-    </div>
-    <h2>Criar contas</h2>
-    <form id="form-register">
-      <div class="input-group">
-        <input type="text" placeholder="Usuário" name="username" required>
-      </div>
-      <div class="input-group">
-        <input type="password" placeholder="Senha" name="password" required>
-      </div>
-      <div class="input-group">
-        <select name="classe" required>
-          <option value="1">Aluno</option>
-          <option value="2">Equipe Pedagógica</option>
-          <option value="3">Admin</option>
-        </select>
-      </div>
-      <button type="submit" class="login-btn">Registrar</button>
-    </form>
-    <div id="register-message" class="login-message"></div>
-    <p class="register-link">Já tem conta? <a href="login.html">Entrar</a></p>
-  </div>
-  <script>
-    document.getElementById('form-register').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const data = {
-        username: form.username.value,
-        password: form.password.value,
-        classe: form.classe.value
-      };
-      const msg = document.getElementById('register-message');
-      msg.textContent = '';
-      try {
-        const res = await fetch('/api/register', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify(data) });
-        const j = await res.json();
-        if (j.ok) {
-          msg.style.color = '#388e3c';
-          msg.textContent = 'Conta criada com sucesso!';
-          setTimeout(() => { location.href = '/'; }, 800);
-        } else {
-          msg.style.color = '#d32f2f';
-          msg.textContent = j.error || 'Não foi possível criar a conta.';
-        }
-      } catch (err) {
-        msg.style.color = '#d32f2f';
-        msg.textContent = 'Erro de conexão com o servidor.';
-      }
-    });
-  </script>
-  <script>
-    document.getElementById('form-register').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const data = {
-        username: form.username.value,
-        password: form.password.value,
-        classe: form.classe.value
-      };
-      const msg = document.getElementById('register-message');
-      msg.textContent = '';
-      try {
-        const res = await fetch('/api/register', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify(data) });
-        const j = await res.json();
-        if (j.ok) {
-          msg.style.color = '#388e3c';
-          msg.textContent = 'Conta criada com sucesso!';
-          setTimeout(() => { location.href = '/'; }, 800);
-        } else {
-          msg.style.color = '#d32f2f';
-          msg.textContent = j.error || 'Não foi possível criar a conta.';
-        }
-      } catch (err) {
-        msg.style.color = '#d32f2f';
-        msg.textContent = 'Erro de conexão com o servidor.';
-      }
-    });
-  </script>
+    <!-- Register Section -->
+    <section class="register-section" aria-labelledby="register-title">
+        <div class="register-container">
+            <div class="register-card">
+                <div class="register-header">
+                    <h1 id="register-title">Criar Conta</h1>
+                    <p>Preencha os campos abaixo para criar sua conta</p>
+                </div>
+
+                <form id="registerForm" class="register-form" novalidate>
+                    <div class="form-group">
+                        <label for="username">Usuário:</label>
+                        <input type="text" id="username" name="username" required 
+                               placeholder="Digite seu usuário" minlength="3" maxlength="20">
+                        <span class="error-message" id="username-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Senha:</label>
+                        <input type="password" id="password" name="password" required 
+                               placeholder="Digite sua senha" minlength="6">
+                        <span class="error-message" id="password-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">Confirmar Senha:</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required 
+                               placeholder="Confirme sua senha">
+                        <span class="error-message" id="confirm-password-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="classe">Tipo de Usuário:</label>
+                        <select id="classe" name="classe" required>
+                            <option value="">Selecione o tipo de usuário...</option>
+                            <option value="admin">Administrador</option>
+                            <option value="professor">Professor</option>
+                            <option value="aluno">Aluno</option>
+                        </select>
+                        <span class="error-message" id="classe-error"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-register">
+                        <span class="btn-text">Criar Conta</span>
+                        <span class="btn-loading" style="display: none;">Processando...</span>
+                    </button>
+
+                    <div class="login-link">
+                        <p>Já tem uma conta? <a href="login.html">Faça login aqui</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/register.js"></script>
 </body>
 </html>
