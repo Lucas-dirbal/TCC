@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistema de Gestão</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/system.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -17,13 +17,9 @@
             <ul class="nav-menu">
                 <li><a href="index.html">Início</a></li>
                 <li><a href="login.html" class="active">Sistema</a></li>
+                <li><a href="register.html">Registrar</a></li>
                 <li><a href="sobre.html">Sobre</a></li>
             </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
         </div>
     </nav>
 
@@ -32,11 +28,13 @@
         <div class="login-container">
             <div class="login-card">
                 <div class="login-header">
-                    <h1>Acesso ao Sistema</h1>
-                    <p>Entre com suas credenciais</p>
+                    <h1>Login do Sistema</h1>
+                    <p>Acesse sua conta para continuar</p>
                 </div>
 
                 <form id="loginForm" class="login-form">
+                    <div id="loginError" class="alert alert-error" style="display: none;"></div>
+
                     <div class="form-group">
                         <label for="username">Usuário:</label>
                         <input type="text" id="username" name="username" required 
@@ -49,45 +47,32 @@
                                placeholder="Digite sua senha">
                     </div>
 
-                    <div class="form-options">
-                        <label class="checkbox">
-                            <input type="checkbox" id="remember">
-                            <span>Lembrar-me</span>
-                        </label>
-                        <a href="#" class="forgot-password">Esqueci a senha</a>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-login">
+                    <button type="submit" class="btn btn-login">
                         Entrar no Sistema
                     </button>
+
+                    <div class="register-link">
+                        <p>Não tem uma conta? <a href="register.html">Registre-se aqui</a></p>
+                    </div>
                 </form>
 
                 <!-- Demo Credentials -->
                 <div class="demo-credentials">
                     <h3>Credenciais de Demonstração:</h3>
-                    <div class="credential-cards">
-                        <div class="credential-card" data-user="admin" data-pass="admin123">
-                            <strong>Administrador</strong>
-                            <span>admin / admin123</span>
-                            <small>Acesso total ao sistema</small>
-                        </div>
-                        <div class="credential-card" data-user="professor" data-pass="prof123">
-                            <strong>Professor</strong>
-                            <span>professor / prof123</span>
-                            <small>Controle de empréstimos</small>
-                        </div>
-                        <div class="credential-card" data-user="aluno" data-pass="aluno123">
-                            <strong>Aluno</strong>
-                            <span>aluno / aluno123</span>
-                            <small>Visualizar equipamentos</small>
-                        </div>
+                    <div class="credential-item">
+                        <strong>Admin:</strong> admin / admin123
+                    </div>
+                    <div class="credential-item">
+                        <strong>Professor:</strong> professor / prof123
+                    </div>
+                    <div class="credential-item">
+                        <strong>Aluno:</strong> aluno / aluno123
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <script src="js/main.js"></script>
-    <script src="js/auth.js"></script>
+    <script src="js/login.js"></script>
 </body>
 </html>
