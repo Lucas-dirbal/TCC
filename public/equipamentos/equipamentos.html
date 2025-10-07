@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão de Equipamentos</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="icon" href="/imagens/logo.png">
+</head>
+
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="/imagens/logo.png" alt="Logo" height="40">
+        <span>Sistema de Gestão</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/">Início</a></li>
+        <li><a href="/equipamentos" class="active">Equipamentos</a></li>
+        <li><a href="/sobre">Sobre</a></li>
+        <li><a href="/logout" class="logout-btn">Sair</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="equipamentos-section">
+      <div class="header-section">
+        <h1>Equipamentos</h1>
+        <a href="/public/equipamentos/equipamentos.html"><button id="btnAdd" class="btn btn-primary">+ Adicionar</button></a>
+      </div>
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar equipamento...">
+      </div>
+
+      <table class="equip-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="equipTableBody">
+          <!-- Populado dinamicamente -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h2>Novo Equipamento</h2>
+      <form id="formEquip">
+        <input type="text" id="nomeEquip" placeholder="Nome" required>
+        <input type="text" id="categoriaEquip" placeholder="Categoria" required>
+        <select id="statusEquip" required>
+          <option value="Disponível">Disponível</option>
+          <option value="Em uso">Em uso</option>
+          <option value="Manutenção">Manutenção</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/equipamentos.js"></script>
+</body>
+</html>
