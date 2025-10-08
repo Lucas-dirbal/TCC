@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir arquivos estáticos
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Sessões
 app.use(
@@ -64,23 +64,23 @@ function requireAuth(req, res, next) {
 
 // Rotas de páginas
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
 });
 
 app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
+  res.sendFile(path.join(__dirname, "..", "public", "login.html"));
 });
 
 app.get("/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "register.html"));
+  res.sendFile(path.join(__dirname, "..", "public", "register.html"));
 });
 
 app.get("/sobre", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "sobre.html"));
+  res.sendFile(path.join(__dirname, "..", "public", "sobre.html"));
 });
 
 app.get("/sistema", requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "sistema.html"));
+  res.sendFile(path.join(__dirname, "..", "public", "sistema.html"));
 });
 
 // Rotas de API

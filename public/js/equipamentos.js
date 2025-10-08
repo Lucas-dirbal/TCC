@@ -1,60 +1,157 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const tableBody = document.getElementById("equipTableBody");
-  const btnAdd = document.getElementById("btnAdd");
-  const modal = document.getElementById("modal");
-  const closeModal = document.getElementById("closeModal");
-  const form = document.getElementById("formEquip");
-  const searchInput = document.getElementById("searchInput");
+function openTab(tabName) {
+    // Esconde todas as abas
+    const tabContents = document.getElementsByClassName('tab-content');
+    for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove('active');
+    }
 
-  let equipamentos = [
-    { id: 1, nome: "Notebook Dell", categoria: "Informática", status: "Disponível" },
-    { id: 2, nome: "Projetor Epson", categoria: "Audiovisual", status: "Em uso" },
-    { id: 3, nome: "Multímetro", categoria: "Laboratório", status: "Manutenção" }
-  ];
+    // Remove a classe active de todas as tabs
+    const tabButtons = document.getElementsByClassName('nav-tab');
+    for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].classList.remove('active');
+    }
 
-  const renderTable = (data) => {
-    tableBody.innerHTML = "";
-    data.forEach(eq => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${eq.id}</td>
-        <td>${eq.nome}</td>
-        <td>${eq.categoria}</td>
-        <td>${eq.status}</td>
-        <td>
-          <button class="btn-small edit">✏️</button>
-          <button class="btn-small delete">🗑️</button>
-        </td>
-      `;
-      tableBody.appendChild(tr);
+    // Mostra a aba selecionada
+    document.getElementById(tabName).classList.add('active');
+    
+    // Ativa o botão da aba selecionada
+    event.currentTarget.classList.add('active');
+}
+
+function logout() {
+    if (confirm('Tem certeza que deseja sair do sistema?')) {
+        alert('Saindo do sistema...');
+        // Redirecionar para página de login
+        // window.location.href = 'login.html';
+    }
+}
+
+// Funções para Clientes
+function novoCliente() {
+    alert('Abrindo formulário para novo cliente...');
+    // window.location.href = 'form-cliente.html';
+}
+
+function editarCliente() {
+    alert('Editando cliente...');
+    // Implementar lógica de edição
+}
+
+function excluirCliente() {
+    if (confirm('Tem certeza que deseja excluir este cliente?')) {
+        alert('Cliente excluído com sucesso!');
+        // Implementar lógica de exclusão
+    }
+}
+
+function exportarClientes() {
+    alert('Exportando dados dos clientes...');
+    // Implementar lógica de exportação
+}
+
+// Funções para Produtos
+function novoProduto() {
+    alert('Abrindo formulário para novo produto...');
+    // window.location.href = 'form-produto.html';
+}
+
+function editarProduto() {
+    alert('Editando produto...');
+    // Implementar lógica de edição
+}
+
+function ajustarEstoque() {
+    alert('Abrindo ajuste de estoque...');
+    // Implementar lógica de ajuste de estoque
+}
+
+function importarProdutos() {
+    alert('Importando produtos...');
+    // Implementar lógica de importação
+}
+
+// Funções para Vendas
+function novaVenda() {
+    alert('Iniciando nova venda...');
+    // window.location.href = 'nova-venda.html';
+}
+
+function consultarVendas() {
+    alert('Consultando vendas...');
+    // Implementar lógica de consulta
+}
+
+function cancelarVenda() {
+    if (confirm('Tem certeza que deseja cancelar esta venda?')) {
+        alert('Venda cancelada com sucesso!');
+        // Implementar lógica de cancelamento
+    }
+}
+
+function relatorioVendas() {
+    alert('Gerando relatório de vendas...');
+    // Implementar geração de relatório
+}
+
+// Funções para Relatórios
+function gerarRelatorioVendas() {
+    alert('Gerando relatório de vendas...');
+    // Implementar geração de relatório
+}
+
+function gerarRelatorioClientes() {
+    alert('Gerando relatório de clientes...');
+    // Implementar geração de relatório
+}
+
+function gerarRelatorioEstoque() {
+    alert('Gerando relatório de estoque...');
+    // Implementar geração de relatório
+}
+
+function gerarRelatorioFinanceiro() {
+    alert('Gerando relatório financeiro...');
+    // Implementar geração de relatório
+}
+
+// Event Listeners para melhor experiência
+document.addEventListener('DOMContentLoaded', function() {
+    // Adiciona eventos de hover nos botões
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
     });
-  };
 
-  renderTable(equipamentos);
-
-  btnAdd.onclick = () => modal.style.display = "block";
-  closeModal.onclick = () => modal.style.display = "none";
-
-  form.onsubmit = (e) => {
-    e.preventDefault();
-    const novoEquip = {
-      id: equipamentos.length + 1,
-      nome: form.nomeEquip.value,
-      categoria: form.categoriaEquip.value,
-      status: form.statusEquip.value
-    };
-    equipamentos.push(novoEquip);
-    renderTable(equipamentos);
-    modal.style.display = "none";
-    form.reset();
-  };
-
-  searchInput.addEventListener("input", () => {
-    const filtro = searchInput.value.toLowerCase();
-    const filtrados = equipamentos.filter(eq =>
-      eq.nome.toLowerCase().includes(filtro) ||
-      eq.categoria.toLowerCase().includes(filtro)
-    );
-    renderTable(filtrados);
-  });
+    // Busca em tempo real na tabela de clientes
+    const searchInput = document.querySelector('.search-box input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('.table tbody tr');
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
 });
+
+// Função para carregar dados iniciais
+function carregarDadosIniciais() {
+    console.log('Sistema carregado com sucesso!');
+    // Aqui você pode carregar dados iniciais da API ou localStorage
+}
+
+// Inicializar sistema quando a página carregar
+window.onload = carregarDadosIniciais;
