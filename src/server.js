@@ -1,9 +1,10 @@
 // server.js
 const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const session = require("express-session");
 const SQLiteStore = require("connect-sqlite3")(session);
+const bcrypt = require("bcryptjs");
+const db = require("./db");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,50 +12,18 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Servir arquivos estáticos
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 // Sessões
 app.use(
   session({
-    store: new SQLiteStore({
-      db: "sessions.sqlite",
-      dir: __dirname,
-    }),
+    store: new SQLiteStore({ db: "sessions.sqlite", dir: __dirname }),
     secret: "seu-segredo-aqui",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }, // 24h
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 },
   })
 );
-
-// Banco de Dados
-const db = new sqlite3.Database(path.join(__dirname, "data.sqlite"));
-
-// Inicializar banco
-function initializeDatabase() {
-  db.run(`CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    role TEXT NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )`);
-
-  const users = [
-    { username: "admin", password: "admin123", role: "admin" },
-    { username: "professor", password: "prof123", role: "professor" },
-    { username: "aluno", password: "aluno123", role: "aluno" },
-  ];
-
-  const insert = db.prepare(
-    `INSERT OR IGNORE INTO users (username, password, role) VALUES (?, ?, ?)`
-  );
-  users.forEach((u) => insert.run(u.username, u.password, u.role));
-  insert.finalize();
-}
-initializeDatabase();
 
 // Middleware de autenticação
 function requireAuth(req, res, next) {
@@ -62,38 +31,33 @@ function requireAuth(req, res, next) {
   else res.redirect("/login");
 }
 
+// Middleware por cargo
+function requireRole(role) {
+  return (req, res, next) => {
+    if (req.session.user && req.session.user.role === role) next();
+    else res.status(403).send("Acesso negado!");
+  };
+}
+
 // Rotas de páginas
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
-});
+app.get("/", (req, res) => res.sendFile(path.join(__dirname, "..", "public", "index.html")));
+app.get("/login", (req, res) => res.sendFile(path.join(__dirname, "..", "public", "login.html")));
+app.get("/register", (req, res) => res.sendFile(path.join(__dirname, "..", "public", "register.html")));
+app.get("/sobre", (req, res) => res.sendFile(path.join(__dirname, "..", "public", "sobre.html")));
+app.get("/sistema", requireAuth, (req, res) => res.sendFile(path.join(__dirname, "..", "public", "sistema.html")));
 
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "login.html"));
-});
-
-app.get("/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "register.html"));
-});
-
-app.get("/sobre", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "sobre.html"));
-});
-
-app.get("/sistema", requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "sistema.html"));
-});
-
-// Rotas de API
+// APIs
 app.post("/api/login", (req, res) => {
   const { username, password } = req.body;
-  db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
-    if (err) return res.status(500).json({ success: false, message: "Erro no servidor" });
-    if (!user || user.password !== password)
-      return res.status(401).json({ success: false, message: "Usuário ou senha incorretos" });
+  const user = db.prepare("SELECT * FROM users WHERE username = ?").get(username);
 
-    req.session.user = { id: user.id, username: user.username, role: user.role };
-    res.json({ success: true, user: req.session.user });
-  });
+  if (!user) return res.status(401).json({ success: false, message: "Usuário não encontrado" });
+
+  const valid = bcrypt.compareSync(password, user.password_hash);
+  if (!valid) return res.status(401).json({ success: false, message: "Senha incorreta" });
+
+  req.session.user = { id: user.id, username: user.username, role: user.role };
+  res.json({ success: true, user: req.session.user });
 });
 
 app.post("/api/logout", (req, res) => {
@@ -101,19 +65,23 @@ app.post("/api/logout", (req, res) => {
 });
 
 app.post("/api/register", (req, res) => {
-  const { username, password, classe } = req.body;
-  if (!username || !password || !classe)
+  const { username, password, role } = req.body;
+  if (!username || !password || !role)
     return res.status(400).json({ success: false, message: "Campos obrigatórios" });
 
-  db.run(
-    "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-    [username, password, classe],
-    function (err) {
-      if (err)
-        return res.status(500).json({ success: false, message: "Erro ao registrar usuário" });
-      res.json({ success: true, id: this.lastID });
+  const hash = bcrypt.hashSync(password, 10);
+
+  try {
+    const stmt = db.prepare("INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)");
+    const info = stmt.run(username, hash, role);
+    res.json({ success: true, id: info.lastInsertRowid });
+  } catch (err) {
+    if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      res.status(400).json({ success: false, message: "Usuário já existe" });
+    } else {
+      res.status(500).json({ success: false, message: "Erro ao registrar usuário" });
     }
-  );
+  }
 });
 
 app.get("/api/user", (req, res) => {
@@ -121,16 +89,9 @@ app.get("/api/user", (req, res) => {
   else res.json({ success: false });
 });
 
-// Health check
-app.get("/api/health", (req, res) => {
-  res.json({ status: "OK", time: new Date().toISOString() });
-});
+app.get("/api/health", (req, res) => res.json({ status: "OK", time: new Date().toISOString() }));
 
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando em: http://localhost:${PORT}`);
-  console.log("📂 Acesse as páginas:");
-  console.log(`➡️  /           → index.html`);
-  console.log(`➡️  /login      → login.html`);
-  console.log(`➡️  /sistema    → sistema.html (após login)`);
 });

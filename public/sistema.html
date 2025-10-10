@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="/css/responsive.css">
   <link rel="stylesheet" href="/css/system.css">
 </head>
-
 <body>
+  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-container">
       <div class="nav-logo">
@@ -22,14 +22,17 @@
       </ul>
       <div class="user-info">
         <span id="userDisplay">👤 Usuário</span>
-        <div class="user-role" id="userRole">Admin</div>
+        <div class="user-role" id="userRole">Cargo</div>
       </div>
     </div>
   </nav>
 
+  <!-- SISTEMA -->
   <div class="system-container">
+    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-menu">
+        <!-- MENU PRINCIPAL
         <div class="menu-section">
           <h3>Principal</h3>
           <ul>
@@ -37,19 +40,44 @@
             <li><a href="#equipamentos" class="menu-item" data-section="equipamentos">💻 Equipamentos</a></li>
             <li><a href="#emprestimos" class="menu-item" data-section="emprestimos">🔄 Empréstimos</a></li>
           </ul>
-        </div>
+        </div> -->
+
+        <!-- MENU ADMIN -->
         <div class="menu-section admin-only">
           <h3>Administrativo</h3>
           <ul>
             <li><a href="#usuarios" class="menu-item" data-section="usuarios">👥 Usuários</a></li>
             <li><a href="#relatorios" class="menu-item" data-section="relatorios">📈 Relatórios</a></li>
             <li><a href="#configuracoes" class="menu-item" data-section="configuracoes">⚙ Configurações</a></li>
+            <li><a href="#turmas" class="menu-item" data-section="turmas">📚 Turmas</a></li>
+            <li><a href="#avaliacoes" class="menu-item" data-section="avaliacoes">📝 Avaliações</a></li>
+            <li><a href="#minhas-tarefas" class="menu-item" data-section="minhas-tarefas">💻 Solicitar Equipamento</a></li>
+          </ul>
+        </div>
+
+        <!-- MENU PROFESSOR -->
+        <div class="menu-section professor-only">
+          <h3>Professor</h3>
+          <ul>
+            <li><a href="#turmas" class="menu-item" data-section="turmas">📚 Turmas</a></li>
+            <li><a href="#avaliacoes" class="menu-item" data-section="avaliacoes">✅ Solicitações</a></li>
+            <li><a href="#minhas-tarefas" class="menu-item" data-section="minhas-tarefas">💻 Solicitar Equipamento</a></li>
+          </ul>
+        </div>
+
+        <!-- MENU ALUNO -->
+        <div class="menu-section aluno-only">
+          <h3>Aluno</h3>
+          <ul>
+            <li><a href="#minhas-tarefas" class="menu-item" data-section="minhas-tarefas">💻 Solicitar Equipamento</a></li>
           </ul>
         </div>
       </div>
     </aside>
 
+    <!-- CONTEÚDO PRINCIPAL -->
     <main class="main-content">
+      <!-- DASHBOARD -->
       <section id="dashboard" class="content-section active">
         <div class="section-header">
           <h1>Dashboard</h1>
@@ -63,6 +91,7 @@
         </div>
       </section>
 
+      <!-- EQUIPAMENTOS -->
       <section id="equipamentos" class="content-section">
         <div class="section-header">
           <h1>Gestão de Equipamentos</h1>
@@ -92,26 +121,43 @@
           </table>
         </div>
       </section>
+
+      <!-- OUTRAS SEÇÕES (exemplo administrativo, professor, aluno) -->
+      <section id="usuarios" class="content-section admin-only">
+        <h1>Usuários</h1>
+        <p>Gerenciamento de usuários do sistema</p>
+      </section>
+
+      <section id="relatorios" class="content-section admin-only">
+        <h1>Relatórios</h1>
+        <p>Visualização de relatórios</p>
+      </section>
+
+      <section id="turmas" class="content-section professor-only">
+        <h1>Turmas</h1>
+        <p>Gerenciamento de turmas</p>
+      </section>
+
+      <section id="avaliacoes" class="content-section professor-only">
+        <h1>Avaliações</h1>
+        <p>Gerenciamento de avaliações</p>
+      </section>
+
+      <section id="minhas-tarefas" class="content-section aluno-only">
+        <h1>Minhas Tarefas</h1>
+        <p>Visualização de tarefas e atividades</p>
+      </section>
     </main>
   </div>
 
+  <!-- SCRIPTS -->
   <script src="/js/main.js"></script>
   <script src="/js/auth.js"></script>
   <script src="/js/equipmentManager.js"></script>
   <script src="/js/loanSystem.js"></script>
   <script src="/js/reports.js"></script>
 
-  <script>
-    document.getElementById("logoutBtn").addEventListener("click", (e) => {
-      e.preventDefault();
-      fetch("/api/logout", { method: "POST" })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) window.location.href = "/login";
-          else alert("Erro ao sair: " + (data.message || "Tente novamente"));
-        })
-        .catch(() => alert("Erro de conexão ao sair."));
-    });
-  </script>
+  <!-- JS para logout e controle de cargos -->
+  <script src="./js/sistema.js"></script>
 </body>
 </html>
