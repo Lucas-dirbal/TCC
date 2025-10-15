@@ -126,6 +126,27 @@
       <section id="usuarios" class="content-section admin-only">
         <h1>Usuários</h1>
         <p>Gerenciamento de usuários do sistema</p>
+        <div class="section-actions">
+          <button class="btn btn-primary" id="btnNovoUsuario">➕ Novo Usuário</button>
+          <div class="search-box">
+            <input type="text" id="searchUsuarios" placeholder="Buscar usuários...">
+            <span>🔍</span>
+          </div>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Cargo</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="usuariosTable"></tbody>
+          </table>
+        </div>
       </section>
 
       <section id="relatorios" class="content-section admin-only">
@@ -156,6 +177,7 @@
   <script src="/js/equipmentManager.js"></script>
   <script src="/js/loanSystem.js"></script>
   <script src="/js/reports.js"></script>
+  <script src="/js/userManager.js"></script>
 
   <!-- JS para logout e controle de cargos -->
   <script src="./js/sistema.js"></script>

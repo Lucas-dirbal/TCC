@@ -11,17 +11,27 @@ class UserManager {
 
     // Obter todos os usuários (com filtro para não-admins)
     getUsers() {
-        if (this.isAdmin()) {
-            return this.users;
-        } else {
-            // Usuários não-admin só veem suas próprias informações
-            return this.users.filter(user => user.id === this.currentUser.id);
+        // Buscar usuários da API
+        return this.fetchUsersFromAPI();
+    }
+
+    async fetchUsersFromAPI() {
+        try {
+            const response = await fetch('/api/users');
+            const result = await response.json();
+            if (result.success && Array.isArray(result.users)) {
+                return result.users;
+            } else {
+                return [];
+            }
+        } catch (error) {
+            return [];
         }
     }
 
     // Criar novo usuário
     createUser(userData) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 // Verificar se é admin para criar usuários
                 if (!this.isAdmin() && userData.role === 'admin') {
@@ -29,31 +39,23 @@ class UserManager {
                     return;
                 }
 
-                // Verificar se email já existe
-                if (this.users.find(u => u.email === userData.email)) {
-                    reject(new Error('Email já cadastrado'));
-                    return;
-                }
-
-                const newUser = {
-                    id: Date.now().toString(),
-                    name: userData.name,
-                    email: userData.email,
-                    password: userData.password,
-                    role: userData.role || 'user',
-                    status: 'active',
-                    createdAt: new Date().toISOString(),
-                    createdBy: this.currentUser.id
-                };
-
-                this.users.push(newUser);
-                this.saveToStorage();
-
-                resolve({
-                    success: true,
-                    user: newUser,
-                    message: 'Usuário criado com sucesso!'
+                // Chamada para API
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: userData.name,
+                        password: userData.password,
+                        email: userData.email,
+                        role: userData.role
+                    })
                 });
+                const result = await response.json();
+                if (result.success) {
+                    resolve({ success: true, user: { id: result.id, ...userData }, message: 'Usuário criado com sucesso!' });
+                } else {
+                    reject(new Error(result.message || 'Erro ao criar usuário'));
+                }
             } catch (error) {
                 reject(error);
             }
@@ -62,41 +64,29 @@ class UserManager {
 
     // Atualizar usuário
     updateUser(userId, updates) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
-                const userIndex = this.users.findIndex(u => u.id === userId);
-                
-                if (userIndex === -1) {
-                    reject(new Error('Usuário não encontrado'));
-                    return;
-                }
-
-                // Verificar permissões
-                if (!this.isAdmin() && userId !== this.currentUser.id) {
+                // Apenas admin pode editar qualquer usuário
+                if (!this.isAdmin()) {
                     reject(new Error('Sem permissão para editar este usuário'));
                     return;
                 }
-
-                // Não permitir que não-admins mudem o role
-                if (!this.isAdmin() && updates.role) {
-                    delete updates.role;
-                }
-
-                // Atualizar usuário
-                this.users[userIndex] = {
-                    ...this.users[userIndex],
-                    ...updates,
-                    updatedAt: new Date().toISOString(),
-                    updatedBy: this.currentUser.id
-                };
-
-                this.saveToStorage();
-
-                resolve({
-                    success: true,
-                    user: this.users[userIndex],
-                    message: 'Usuário atualizado com sucesso!'
+                const response = await fetch(`/api/user/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: updates.name,
+                        email: updates.email,
+                        role: updates.role,
+                        password: updates.password
+                    })
                 });
+                const result = await response.json();
+                if (result.success) {
+                    resolve({ success: true, message: result.message });
+                } else {
+                    reject(new Error(result.message || 'Erro ao atualizar usuário'));
+                }
             } catch (error) {
                 reject(error);
             }
@@ -145,63 +135,48 @@ class UserManager {
 
     // Gerar HTML da tabela de usuários
     renderUsersTable() {
-        const users = this.getUsers();
-        
-        if (users.length === 0) {
+        return this.fetchUsersFromAPI().then(users => {
+            if (!users || users.length === 0) {
+                return `
+                    <div class="no-data">
+                        <p>Nenhum usuário cadastrado</p>
+                    </div>
+                `;
+            }
+            function cargoLabel(role) {
+                if (role === 'admin') return 'Admin';
+                if (role === 'equipe') return 'Equipe pedagógica';
+                if (role === 'aluno') return 'Aluno';
+                return role;
+            }
             return `
-                <div class="no-data">
-                    <p>Nenhum usuário cadastrado</p>
+                <div class="table-container">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Cargo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${users.map(user => `
+                                <tr>
+                                    <td>${user.username}</td>
+                                    <td>-</td>
+                                    <td>${cargoLabel(user.role)}</td>
+                                    <td>
+                                        <button class="btn-edit" onclick="userManager.openEditModal('${user.id}')">Editar</button>
+                                        <button class="btn-delete" onclick="userManager.confirmDelete('${user.id}')">Excluir</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
                 </div>
             `;
-        }
-
-        return `
-            <div class="table-container">
-                <table class="users-table">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Tipo</th>
-                            <th>Status</th>
-                            <th>Data de Criação</th>
-                            ${this.isAdmin() ? '<th>Ações</th>' : ''}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${users.map(user => `
-                            <tr>
-                                <td>${user.name}</td>
-                                <td>${user.email}</td>
-                                <td>
-                                    <span class="badge ${user.role === 'admin' ? 'badge-admin' : 'badge-user'}">
-                                        ${user.role === 'admin' ? 'Administrador' : 'Usuário'}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge ${user.status === 'active' ? 'badge-active' : 'badge-inactive'}">
-                                        ${user.status === 'active' ? 'Ativo' : 'Inativo'}
-                                    </span>
-                                </td>
-                                <td>${new Date(user.createdAt).toLocaleDateString('pt-BR')}</td>
-                                ${this.isAdmin() ? `
-                                    <td class="actions">
-                                        <button class="btn-edit" onclick="userManager.openEditModal('${user.id}')">
-                                            Editar
-                                        </button>
-                                        ${user.id !== this.currentUser.id ? `
-                                            <button class="btn-delete" onclick="userManager.confirmDelete('${user.id}')">
-                                                Excluir
-                                            </button>
-                                        ` : ''}
-                                    </td>
-                                ` : ''}
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        `;
+        });
     }
 
     // Modal para criar/editar usuários

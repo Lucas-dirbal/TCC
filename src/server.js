@@ -1,3 +1,30 @@
+// Endpoint para editar usuário (apenas admin pode editar qualquer usuário)
+app.put("/api/user/:id", requireAuth, requireRole("admin"), (req, res) => {
+  const userId = parseInt(req.params.id);
+  const { username, email, role, password } = req.body;
+  if (!username && !email && !role && !password) {
+    return res.status(400).json({ success: false, message: "Nenhum dado para atualizar" });
+  }
+  try {
+    // Monta query dinâmica
+    let fields = [];
+    let values = [];
+    if (username) { fields.push("username = ?"); values.push(username); }
+    if (email) { fields.push("email = ?"); values.push(email); }
+    if (role) { fields.push("role = ?"); values.push(role); }
+    if (password) { fields.push("password = ?"); values.push(password); }
+    values.push(userId);
+    const stmt = db.prepare(`UPDATE users SET ${fields.join(", ")} WHERE id = ?`);
+    const info = stmt.run(...values);
+    if (info.changes > 0) {
+      res.json({ success: true, message: "Usuário atualizado com sucesso!" });
+    } else {
+      res.status(404).json({ success: false, message: "Usuário não encontrado" });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Erro ao atualizar usuário" });
+  }
+});
 // server.js
 const express = require("express");
 const path = require("path");
@@ -53,10 +80,9 @@ app.post("/api/login", (req, res) => {
 
   if (!user) return res.status(401).json({ success: false, message: "Usuário não encontrado" });
 
-  const valid = bcrypt.compareSync(password, user.password_hash);
-  if (!valid) return res.status(401).json({ success: false, message: "Senha incorreta" });
+  if (user.password !== password) return res.status(401).json({ success: false, message: "Senha incorreta" });
 
-  req.session.user = { id: user.id, username: user.username, role: user.role };
+  req.session.user = { id: user.id, username: user.username, email: user.email, role: user.role };
   res.json({ success: true, user: req.session.user });
 });
 
@@ -65,15 +91,13 @@ app.post("/api/logout", (req, res) => {
 });
 
 app.post("/api/register", (req, res) => {
-  const { username, password, role } = req.body;
-  if (!username || !password || !role)
+  const { username, password, email, role } = req.body;
+  if (!username || !password || !email || !role)
     return res.status(400).json({ success: false, message: "Campos obrigatórios" });
 
-  const hash = bcrypt.hashSync(password, 10);
-
   try {
-    const stmt = db.prepare("INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)");
-    const info = stmt.run(username, hash, role);
+    const stmt = db.prepare("INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)");
+    const info = stmt.run(username, password, email, role);
     res.json({ success: true, id: info.lastInsertRowid });
   } catch (err) {
     if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
@@ -81,6 +105,16 @@ app.post("/api/register", (req, res) => {
     } else {
       res.status(500).json({ success: false, message: "Erro ao registrar usuário" });
     }
+  }
+});
+
+// Endpoint para listar todos os usuários (apenas admin)
+app.get("/api/users", requireAuth, requireRole("admin"), (req, res) => {
+  try {
+    const users = db.prepare("SELECT id, username, email, role FROM users").all();
+    res.json({ success: true, users });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Erro ao buscar usuários" });
   }
 });
 
