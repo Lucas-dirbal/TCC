@@ -1,31 +1,3 @@
-// Endpoint para editar usuário (apenas admin pode editar qualquer usuário)
-app.put("/api/user/:id", requireAuth, requireRole("admin"), (req, res) => {
-  const userId = parseInt(req.params.id);
-  const { username, email, role, password } = req.body;
-  if (!username && !email && !role && !password) {
-    return res.status(400).json({ success: false, message: "Nenhum dado para atualizar" });
-  }
-  try {
-    // Monta query dinâmica
-    let fields = [];
-    let values = [];
-    if (username) { fields.push("username = ?"); values.push(username); }
-    if (email) { fields.push("email = ?"); values.push(email); }
-    if (role) { fields.push("role = ?"); values.push(role); }
-    if (password) { fields.push("password = ?"); values.push(password); }
-    values.push(userId);
-    const stmt = db.prepare(`UPDATE users SET ${fields.join(", ")} WHERE id = ?`);
-    const info = stmt.run(...values);
-    if (info.changes > 0) {
-      res.json({ success: true, message: "Usuário atualizado com sucesso!" });
-    } else {
-      res.status(404).json({ success: false, message: "Usuário não encontrado" });
-    }
-  } catch (err) {
-    res.status(500).json({ success: false, message: "Erro ao atualizar usuário" });
-  }
-});
-// server.js
 const express = require("express");
 const path = require("path");
 const session = require("express-session");
@@ -65,6 +37,34 @@ function requireRole(role) {
     else res.status(403).send("Acesso negado!");
   };
 }
+
+// Endpoint para editar usuário (apenas admin pode editar qualquer usuário)
+app.put("/api/user/:id", requireAuth, requireRole("admin"), (req, res) => {
+  const userId = parseInt(req.params.id);
+  const { username, email, role, password } = req.body;
+  if (!username && !email && !role && !password) {
+    return res.status(400).json({ success: false, message: "Nenhum dado para atualizar" });
+  }
+  try {
+    // Monta query dinâmica
+    let fields = [];
+    let values = [];
+    if (username) { fields.push("username = ?"); values.push(username); }
+    if (email) { fields.push("email = ?"); values.push(email); }
+    if (role) { fields.push("role = ?"); values.push(role); }
+    if (password) { fields.push("password = ?"); values.push(password); }
+    values.push(userId);
+    const stmt = db.prepare(`UPDATE users SET ${fields.join(", ")} WHERE id = ?`);
+    const info = stmt.run(...values);
+    if (info.changes > 0) {
+      res.json({ success: true, message: "Usuário atualizado com sucesso!" });
+    } else {
+      res.status(404).json({ success: false, message: "Usuário não encontrado" });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Erro ao atualizar usuário" });
+  }
+});
 
 // Rotas de páginas
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "..", "public", "index.html")));
@@ -129,3 +129,4 @@ app.get("/api/health", (req, res) => res.json({ status: "OK", time: new Date().t
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando em: http://localhost:${PORT}`);
 });
+
