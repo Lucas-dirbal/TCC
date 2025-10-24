@@ -23,6 +23,7 @@ fetch("/api/user")
         // ESCONDER MENU/SEÇÕES POR CARGO
         if (role !== "admin") document.querySelectorAll(".admin-only").forEach(el => el.style.display = "none");
         if (role !== "professor") document.querySelectorAll(".professor-only").forEach(el => el.style.display = "none");
+        if (role !== "equipe") document.querySelectorAll(".equipe-only").forEach(el => el.style.display = "none");
         if (role !== "aluno") document.querySelectorAll(".aluno-only").forEach(el => el.style.display = "none");
     })
     .catch(() => window.location.href = "/login");
@@ -90,6 +91,7 @@ function renderUsuariosSection() {
                                                     <label for="userRole">Cargo:</label>
                                                                                 <select id="userRole" name="role" style="width:100%;padding:0.5rem;">
                                                                                     <option value="admin">Admin</option>
+                                                                                    <option value="professor">Professor</option>
                                                                                     <option value="equipe">Equipe pedagógica</option>
                                                                                     <option value="aluno">Aluno</option>
                                                                                 </select>
